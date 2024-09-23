@@ -1,14 +1,14 @@
-package org.example.parser;
+package org.example.jsonp;
 
-import org.example.parser.tokens.Token;
-import org.example.parser.tokens.TokenType;
+import org.example.jsonp.tokens.TokenType;
+import org.example.jsonp.tokens.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public  class Lexer {
+class Lexer {
     private String jsonString;
     private List<Token> tokens;
 

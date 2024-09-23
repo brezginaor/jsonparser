@@ -1,12 +1,12 @@
-package org.example.parser;
+package org.example.jsonp;
 
 import org.example.classes.Person;
-import org.example.parser.tokens.Token;
-import org.example.parser.tokens.TokenType;
+import org.example.jsonp.tokens.Token;
+import org.example.jsonp.tokens.TokenType;
 
 import java.util.*;
 
-public class LL1Parser {
+class LL1Parser {
 
     private List<Token> tokens;
     private int position; // Текущая позиция в списке токенов

@@ -1,4 +1,4 @@
-package org.example.parser.tokens;
+package org.example.jsonp.tokens;
 
 public class Token {
     private TokenType tokenType;

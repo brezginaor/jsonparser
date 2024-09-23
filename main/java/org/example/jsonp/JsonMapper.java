@@ -1,4 +1,4 @@
-package org.example.parser;
+package org.example.jsonp;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
