@@ -1,5 +1,6 @@
 package org.example.Encoder;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -15,48 +16,81 @@ public class Encoder {
         Encoder.Encoders.put(type, encoder);
     }
 
-    static {
-        // Register encoders for basic and boxed types
-        register(String.class, str -> "\"" + str + "\"");
-        register(Character.class, ch -> "\"" + ch + "\"");
-
-        // Covers all Number subtypes (Integer, Double, etc.)
-        register(Number.class, num -> num.toString());
-
-        // Special encoders for collections
-        register(List.class, list -> {
-            List<?> lst = (List<?>) list;
-            return lst.stream()
-                    .map(item -> encode(item))
-                    .collect(Collectors.joining(", ", "[", "]"));
-        });
-        register(Map.class, map -> {
-            Map<?, ?> mp = (Map<?, ?>) map;
-            return mp.entrySet().stream()
-                    .map(entry -> encode(entry.getKey()) + ": " + encode(entry.getValue()))
-                    .collect(Collectors.joining(", ", "{", "}"));
-        });
-    }
 
 
     public static String encode(Object obj) {
         if (obj == null)
             return "null";
 
-        // Attempt to find an exact match for the object's class in the registered encoders
         Class<?> type = obj.getClass();
-        Function<Object, String> encoder = Encoders.get(type);
-        if (encoder != null)
-            return encoder.apply(obj);
 
-        // Search for an assignable class encoder
+        // Сначала пытаемся найти точное совпадение типа в зарегистрированных энкодерах
+        Function<Object, String> encoder = Encoders.get(type);
+        if (encoder != null) {
+            return encoder.apply(obj);
+        }
+
+        // Теперь ищем энкодеры для типов, которые могут быть присваиваемыми (например, Map, List)
         for (Map.Entry<Class<?>, Function<Object, String>> entry : Encoders.entrySet()) {
-            if (entry.getKey().isAssignableFrom(type)) {
+            if (entry.getKey().isAssignableFrom(type) && entry.getKey() != Object.class) {
                 return entry.getValue().apply(obj);
             }
         }
 
-        // Finally using to string for patch default
-        return obj.toString();
+        // Используем энкодер для произвольных объектов (Object) в самом конце
+        return Encoders.get(Object.class).apply(obj);
+    }
+
+    // Регистрация энкодеров
+    static {
+        // Регистрация для строк и чисел
+        register(String.class, str -> "\"" + str + "\"");
+        register(Character.class, ch -> "\"" + ch + "\"");
+        register(Number.class, num -> num.toString());
+
+        // Специальные энкодеры для коллекций
+        register(List.class, list -> {
+            List<?> lst = (List<?>) list;
+            return lst.stream()
+                    .map(Encoder::encode)
+                    .collect(Collectors.joining(", ", "[", "]"));
+        });
+
+        register(Map.class, map -> {
+            Map<?, ?> mp = (Map<?, ?>) map;
+            return mp.entrySet().stream()
+                    .map(entry -> {
+                        String encodedKey = (entry.getKey() instanceof String) ? "\"" + entry.getKey() + "\"" : encode(entry.getKey());
+                        String encodedValue = encode(entry.getValue());
+                        return encodedKey + ": " + encodedValue;
+                    })
+                    .collect(Collectors.joining(", ", "{", "}"));
+        });
+
+        // Энкодер для произвольных объектов (Object) должен регистрироваться последним
+        register(Object.class, obj -> {
+            // Пропускаем системные классы (например, java.util.*)
+            if (obj.getClass().getPackageName().startsWith("java.")) {
+                return obj.toString();
+            }
+
+            StringBuilder result = new StringBuilder("{");
+            Field[] fields = obj.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                try {
+                    result.append("\"").append(field.getName()).append("\": ")
+                            .append(encode(field.get(obj)))
+                            .append(", ");
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (fields.length > 0) {
+                result.setLength(result.length() - 2);  // Удаляем последнюю запятую
+            }
+            result.append("}");
+            return result.toString();
+        });
     }
 }

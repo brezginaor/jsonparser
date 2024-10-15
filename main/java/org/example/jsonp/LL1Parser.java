@@ -1,6 +1,5 @@
 package org.example.jsonp;
 
-import org.example.classes.Person;
 import org.example.jsonp.tokens.Token;
 import org.example.jsonp.tokens.TokenType;
 
@@ -15,7 +14,6 @@ class LL1Parser {
     private HashMap<String, Object> parsedResult;
     private JsonMapper jsonMapper;
 
-    Person person=new Person();
 
     public LL1Parser(List<Token> tokens) {
         this.tokens = tokens;

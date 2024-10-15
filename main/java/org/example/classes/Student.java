@@ -19,4 +19,16 @@ public class Student {
                 ", grades=" + grades +
                 '}';
     }
+
+    public void setName(String johnDoe) {
+    }
+
+    public void setAge(int i) {
+    }
+
+    public void setStudent(boolean b) {
+    }
+
+    public void setGrades(List<Integer> list) {
+    }
 }
