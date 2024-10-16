@@ -1,4 +1,4 @@
-package org.example.classes;
+package org.example.jsonp;
 
 import java.util.List;
 
@@ -32,3 +32,4 @@ public class Student {
     public void setGrades(List<Integer> list) {
     }
 }
+

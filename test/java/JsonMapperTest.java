@@ -1,6 +1,5 @@
 package org.example.jsonp;
 
-import org.example.classes.Person;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;

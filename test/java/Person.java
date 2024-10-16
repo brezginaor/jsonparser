@@ -1,4 +1,4 @@
-package org.example.classes;
+package org.example.jsonp;
 
 public class Person {
     private String name;
