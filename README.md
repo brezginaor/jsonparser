@@ -58,54 +58,6 @@
 
 Пример содержимого `lookupTable`:
 
-<<<<<<< HEAD
-- **<json>**:
-    - `BRACKET_OBJECT_LEFT` → `<object>`
-    - `BRACKET_ARRAY_LEFT` → `<array>`
-    - `NUMBER` → `<primitive>`
-    - `STRING` → `<primitive>`
-    - `TRUE` → `<primitive>`
-    - `FALSE` → `<primitive>`
-    - `NULL` → `<primitive>`
-
-- **<primitive>**:
-    - `NUMBER` → `NUMBER`
-    - `STRING` → `STRING`
-    - `TRUE` → `TRUE`
-    - `FALSE` → `FALSE`
-    - `NULL` → `NULL`
-
-- **<object>**:
-    - `BRACKET_OBJECT_LEFT` → `{` `<members>` `}`
-
-- **<members>**:
-    - `STRING` → `<member>` `<members_prime>`
-    - `BRACKET_OBJECT_RIGHT` → `EPSILON`
-
-- **<members_prime>**:
-    - `COMMA` → `,` `<member>` `<members_prime>`
-    - `BRACKET_OBJECT_RIGHT` → `EPSILON`
-
-- **<member>**:
-    - `STRING` → `STRING` `:` `<json>`
-
-- **<array>**:
-    - `BRACKET_ARRAY_LEFT` → `[` `<elements>` `]`
-
-- **<elements>**:
-    - `BRACKET_OBJECT_LEFT` → `<json>` `<elements_prime>`
-    - `BRACKET_ARRAY_LEFT` → `<json>` `<elements_prime>`
-    - `NUMBER` → `<json>` `<elements_prime>`
-    - `STRING` → `<json>` `<elements_prime>`
-    - `TRUE` → `<json>` `<elements_prime>`
-    - `FALSE` → `<json>` `<elements_prime>`
-    - `NULL` → `<json>` `<elements_prime>`
-    - `BRACKET_ARRAY_RIGHT` → `EPSILON`
-
-- **<elements_prime>**:
-    - `COMMA` → `,` `<json>` `<elements_prime>`
-    - `BRACKET_ARRAY_RIGHT` → `EPSILON`
-=======
 - **<json>**: 
   - `BRACKET_OBJECT_LEFT` → `<object>`
   - `BRACKET_ARRAY_LEFT` → `<array>`
@@ -152,7 +104,6 @@
 - **<elements_prime>**:
   - `COMMA` → `,` `<json>` `<elements_prime>`
   - `BRACKET_ARRAY_RIGHT` → `EPSILON`
->>>>>>> 647763dfcb22d79dfeb6ca72a308d9ec29265467
 
 Эта таблица определяет правила переходов для LL(1) парсера на основе текущего символа (токена). Парсер использует эту таблицу для выбора правильных продукций грамматики, основываясь на текущем токене.
 
@@ -162,8 +113,3 @@
 
 Класс `LL1Parser` использует `lookupTable` для разбора токенов в соответствии с правилами грамматики JSON, которые определяют, как элементы JSON (массивы, объекты и примитивы) должны быть обработаны. Таблица переходов помогает LL(1) парсеру принять решение, какое правило применить, основываясь на текущем токене.
 
-<<<<<<< HEAD
-
-    
-=======
->>>>>>> 647763dfcb22d79dfeb6ca72a308d9ec29265467
